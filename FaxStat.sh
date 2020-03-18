@@ -14,7 +14,6 @@ CURRENT_HOUR=$(date +"%HH_%Mm")
 
 STAT_FILE="FAX_STAT_${CURRENT_YEAR}${MOIS}${JOUR}_${CURRENT_HOUR}.txt"
 STAT_FILE_PATH="${CURRENT_PATH}${STAT_FILE}"
-echo "STAT FILE IS ${STAT_FILE_PATH}"
 
 FAXLOG_PATH=${BASEDIR_IN}${FAXLOG_FILE}
 
@@ -25,8 +24,6 @@ if [ ! -f ${FAXLOG_PATH} ]
   then
   echo "Entrer un nom de fichier"
   exit 1
-else
-  echo "Faxlog is ${FAXLOG_PATH}"
 fi
 
 if [ ${#JOUR} -eq 0 ]
@@ -43,7 +40,6 @@ if [ ${#MOIS} -eq 0 ]
   exit 1
 fi
 
-echo "****************** ${FAXSTATUS_PATH_CURRENT}"
 sed -n "/${JOUR}\/${MOIS}/p"  ${FAXLOG_PATH} >  $FAXSTATUS_PATH_CURRENT
 
 
@@ -164,6 +160,8 @@ echo "TOTAL ERROR : ${TOTAL_ERROR}"   >> ${STAT_FILE_PATH}
 
 sudo cp ${FAXSTATUS_PATH_CURRENT}  $BASEDIR_OUT
 sudo cp ${STAT_FILE_PATH}  $BASEDIR_OUT
+
+rm ${FAXSTATUS_PATH_CURRENT} ${STAT_FILE_PATH}
 
 exit 1
 
