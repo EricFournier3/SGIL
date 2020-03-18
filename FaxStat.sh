@@ -1,20 +1,6 @@
 #!/bin/bash
 
-#sed -n '/17\/03/p' faxlog_20200318_8H15.txt.txt | sed -n '/NORMAL/p'  |wc -l #NORMAL
-#sed -n '/17\/03/p' faxlog_20200318_8H15.txt.txt | sed -n '/BUSY/p'  |wc -l #BUSY
-#sed -n '/17\/03/p' faxlog_20200318_8H15.txt.txt | sed -n '/FIMERR/p'  |wc -l #FIMERR
-#sed -n '/17\/03/p' faxlog_20200318_8H15.txt.txt | sed -n '/TMEOUT/p'  |wc -l #TMEOUT
-#sed -n '/17\/03/p' faxlog_20200318_8H15.txt.txt | sed -n '/QUEUED/p'  |wc -l #QUEUED
-#sed -n '/17\/03/p' faxlog_20200318_8H15.txt.txt | sed -n '/CANCEL/p'  |wc -l #CANCEL
-#sed -n '/17\/03/p' faxlog_20200318_8H15.txt.txt | sed -n '/LINDRP/p'  |wc -l #LINDRP
-#sed -n '/17\/03/p' faxlog_20200318_8H15.txt.txt | sed -n '/NOANSW/p'  |wc -l #NOANSW
-#sed -n '/17\/03/p' faxlog_20200318_8H15.txt.txt | sed -n '/NOFILE/p'  |wc -l #NOFILE
-#sed -n '/17\/03/p' faxlog_20200318_8H15.txt.txt | sed -n '/NOTFAX/p'  |wc -l #NOTFAX
-#sed -n '/17\/03/p' faxlog_20200318_8H15.txt.txt | sed -n '/SCHERR/p'  |wc -l #SCHERR
-#sed -n '/17\/03/p' faxlog_20200318_8H15.txt.txt | sed -n '/SNDING/p'  |wc -l #SNDING
-
-
-BASEDIR="/mnt/Partage/LSPQ_Partage/temp_eric/FAX_SGIL/"
+BASEDIR="/mnt/Partage/LSPQ_Partage/temp_eric/FAX_SGIL/"  #TODO CHANGER REPERTOIRE DE BASE
 FAXLOG_FILE=$1
 JOUR="$2"
 MOIS="$3"
@@ -61,23 +47,49 @@ echo "BUSY FAX for ${JOUR}/${MOIS} : ${busy}"
 busy_fail=$(awk '/BUSY/{if($5 > 4){print $2" -- "$5" -- "$6}}' ${FAXLOG_PATH} | sed -n "/${JOUR}\/${MOIS}/p" | wc -l ) 
 echo "BUSYFAIL FAX for ${JOUR}/${MOIS} : ${busy_fail}"
 
-fimeerr=$(awk 'NR>1{print $2" -- "$5" -- "$6}' ${FAXLOG_PATH} | sed -n "/${JOUR}\/${MOIS}/p"  | sed -n '/FIMERR/p' | wc -l)
-echo "FIMEERR FAX for ${JOUR}/${MOIS} : ${fimeerr}"
+busy=$((busy - busy_fail))
+
+
+fimerr=$(awk 'NR>1{print $2" -- "$5" -- "$6}' ${FAXLOG_PATH} | sed -n "/${JOUR}\/${MOIS}/p"  | sed -n '/FIMERR/p' | wc -l)
+echo "FIMERR FAX for ${JOUR}/${MOIS} : ${fimerr}"
+
+fimerr_fail=$(awk '/FIMERR/{if($5 > 4){print $2" -- "$5" -- "$6}}' ${FAXLOG_PATH} | sed -n "/${JOUR}\/${MOIS}/p"  | wc -l)
+echo "FIMERRFAIL FAX for ${JOUR}/${MOIS} : ${fimerr_fail}"
+
+fimerr=$((fimerr - fimerr_fail))
 
 timeout=$(awk 'NR>1{print $2" -- "$5" -- "$6}' ${FAXLOG_PATH} | sed -n "/${JOUR}\/${MOIS}/p"   | sed -n '/TIMEOUT/p' | wc -l)
 echo "TIMEOUT FAX for ${JOUR}/${MOIS} : ${timeout}"
 
+timeout_fail=$(awk '/TIMEOUT/{if($5 > 4){print $2" -- "$5" -- "$6}}' ${FAXLOG_PATH} | sed -n "/${JOUR}\/${MOIS}/p"   | sed -n '/TIMEOUT/p' | wc -l)
+echo "TIMEOUTFAIL FAX for ${JOUR}/${MOIS} : ${timeout_fail}"
+
+timeout=$((timeout - timeout_fail))
+
+
 queued=$(awk 'NR>1{print $2" -- "$5" -- "$6}' ${FAXLOG_PATH} | sed -n "/${JOUR}\/${MOIS}/p"  | sed -n '/QUEUED/p' | wc -l)
 echo "QUEUED FAX for ${JOUR}/${MOIS} : ${queued}"
+
 
 cancel=$(awk 'NR>1{print $2" -- "$5" -- "$6}' ${FAXLOG_PATH} | sed -n "/${JOUR}\/${MOIS}/p"  | sed -n '/CANCEL/p' | wc -l)
 echo "CANCEL FAX for ${JOUR}/${MOIS} : ${cancel}"
 
+
 lindrp=$(awk 'NR>1{print $2" -- "$5" -- "$6}' ${FAXLOG_PATH} | sed -n "/${JOUR}\/${MOIS}/p" | sed -n '/LINDRP/p' | wc -l)
 echo "LINEDROP FAX for ${JOUR}/${MOIS} : ${lindrp}"
 
+lindrp_fail=$(awk '/LINDRP/{if($5 > 4){print $2" -- "$5" -- "$6}}' ${FAXLOG_PATH} | sed -n "/${JOUR}\/${MOIS}/p" |  wc -l)
+echo "LINEDROPFAIL FAX for ${JOUR}/${MOIS} : ${lindrp_fail}"
+
+lindrp=$((lindrp - lindrp_fail))
+
 noansw=$(awk 'NR>1{print $2" -- "$5" -- "$6}' ${FAXLOG_PATH} | sed -n "/${JOUR}\/${MOIS}/p"  | sed -n '/NOANSW/p' | wc -l)
 echo "NOANSWER FAX for ${JOUR}/${MOIS} : ${noansw}"
+
+noansw_fail=$(awk '/NOANSW/{if($5 > 4){print $2" -- "$5" -- "$6}}' ${FAXLOG_PATH} | sed -n "/${JOUR}\/${MOIS}/p"  |  wc -l)
+echo "NOANSWERFAIL FAX for ${JOUR}/${MOIS} : ${noansw_fail}"
+
+noansw=$((noansw - noansw_fail))
 
 nofile=$(awk 'NR>1{print $2" -- "$5" -- "$6}' ${FAXLOG_PATH} | sed -n "/${JOUR}\/${MOIS}/p"  | sed -n '/NOFILE/p' | wc -l)
 echo "NOFILE FAX for ${JOUR}/${MOIS} : ${nofile}"
@@ -85,15 +97,32 @@ echo "NOFILE FAX for ${JOUR}/${MOIS} : ${nofile}"
 notfax=$(awk 'NR>1{print $2" -- "$5" -- "$6}' ${FAXLOG_PATH} | sed -n "/${JOUR}\/${MOIS}/p"   | sed -n '/NOTFAX/p' | wc -l)
 echo "NOTFAX FAX for ${JOUR}/${MOIS} : ${notfax}"
 
+notfax_fail=$(awk '/NOTFAX/{if($5 > 4){print $2" -- "$5" -- "$6}}' ${FAXLOG_PATH} | sed -n "/${JOUR}\/${MOIS}/p"  |  wc -l)
+echo "NOTFAXFAIL FAX for ${JOUR}/${MOIS} : ${notfax_fail}"
+
+notfax=$((notfax - notfax_fail))
+
 scherr=$(awk 'NR>1{print $2" -- "$5" -- "$6}' ${FAXLOG_PATH} | sed -n "/${JOUR}\/${MOIS}/p"  | sed -n '/SCHERR/p' | wc -l)
 echo "SCHERR FAX for ${JOUR}/${MOIS} : ${scherr}"
+
+scherr_fail=$(awk '/SCHERR/{if($5 > 4){print $2" -- "$5" -- "$6}}'  ${FAXLOG_PATH} | sed -n "/${JOUR}\/${MOIS}/p"  |  wc -l)
+echo "SCHERRFAIL FAX for ${JOUR}/${MOIS} : ${scherr_fail}"
+
+scherr=$((scherr - scherr_fail))
 
 snding=$(awk 'NR>1{print $2" -- "$5" -- "$6}' ${FAXLOG_PATH} | sed -n "/${JOUR}\/${MOIS}/p"  | sed -n '/SNDING/p' | wc -l)
 echo "SENDING FAX for ${JOUR}/${MOIS} : ${snding}"
 
-TOTAL_ERROR=$((cancel + lindrp + noansw + nofile + notfax + scherr + timeout + busy_fail))
+echo "------------------------------ SOMMAIRE ${JOUR}/${MOIS} ---------------------------------------"
 
-echo "TOTAL ERROR for ${JOUR}/${MOIS} : ${TOTAL_ERROR}"
+
+
+TOTAL_ERROR=$((busy_fail + fimerr_fail + timeout_fail + lindrp_fail + noansw_fail + notfax + scherr_fail))
+TOTAL_PENDING=$((busy + fimerr + timeout + queued + cancel + lindrp + noansw + nofile + notfax + scherr + snding))
+
+echo "TOTAL SEND : ${normal}"
+echo "TOTAL PENDING : ${TOTAL_PENDING}"
+echo "TOTAL ERROR : ${TOTAL_ERROR}"
 
 
 
