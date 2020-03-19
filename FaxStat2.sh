@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#TODO AJOUTER MOUNT
+
+
 #BASEDIR="/mnt/Partage/LSPQ_Partage/temp_eric/FAX_SGIL/"
 BASEDIR="/mnt/Partage/LSPQ_Partage/SGIL/FAX_STAT/"
 BASEDIR_IN=${BASEDIR}"IN/"
@@ -78,7 +81,7 @@ echo "FIMERR FAX for ${JOUR}/${MOIS} : ${fimerr}" >> ${STAT_FILE_PATH}
 fimerr_fail=$(awk '/FIMERR/{if($5 > 4){print $2" -- "$5" -- "$6}}' ${FAXLOG_PATH} | sed -n "/${JOUR}\/${MOIS}/p"  | wc -l)
 echo "FIMERRFAIL FAX for ${JOUR}/${MOIS} : ${fimerr_fail}"
 echo "FIMERRFAIL FAX for ${JOUR}/${MOIS} : ${fimerr_fail}"  >> ${STAT_FILE_PATH}
-awk '/FIMERR/{if($5 > 4){print $0}}' ${FAXLOG_PATH} | sed -n "/${JOUR}\/${MOIS}/p" > ${ERROR_FILE_PATH}  
+awk '/FIMERR/{if($5 > 4){print $0}}' ${FAXLOG_PATH} | sed -n "/${JOUR}\/${MOIS}/p" >> ${ERROR_FILE_PATH}  
 
 fimerr=$((fimerr - fimerr_fail))
 
@@ -89,7 +92,7 @@ echo "TIMEOUT FAX for ${JOUR}/${MOIS} : ${timeout}"  >> ${STAT_FILE_PATH}
 timeout_fail=$(awk '/TIMEOUT/{if($5 > 4){print $2" -- "$5" -- "$6}}' ${FAXLOG_PATH} | sed -n "/${JOUR}\/${MOIS}/p"   | sed -n '/TIMEOUT/p' | wc -l)
 echo "TIMEOUTFAIL FAX for ${JOUR}/${MOIS} : ${timeout_fail}"
 echo "TIMEOUTFAIL FAX for ${JOUR}/${MOIS} : ${timeout_fail}"  >> ${STAT_FILE_PATH}
-awk '/TIMEOUT/{if($5 > 4){print $0}}' ${FAXLOG_PATH} | sed -n "/${JOUR}\/${MOIS}/p" > ${ERROR_FILE_PATH}  
+awk '/TIMEOUT/{if($5 > 4){print $0}}' ${FAXLOG_PATH} | sed -n "/${JOUR}\/${MOIS}/p" >> ${ERROR_FILE_PATH}  
 
 timeout=$((timeout - timeout_fail))
 
@@ -111,7 +114,7 @@ echo "LINEDROP FAX for ${JOUR}/${MOIS} : ${lindrp}" >> ${STAT_FILE_PATH}
 lindrp_fail=$(awk '/LINDRP/{if($5 > 4){print $2" -- "$5" -- "$6}}' ${FAXLOG_PATH} | sed -n "/${JOUR}\/${MOIS}/p" |  wc -l)
 echo "LINEDROPFAIL FAX for ${JOUR}/${MOIS} : ${lindrp_fail}"
 echo "LINEDROPFAIL FAX for ${JOUR}/${MOIS} : ${lindrp_fail}" >> ${STAT_FILE_PATH}
-awk '/LINDRP/{if($5 > 4){print $0}}' ${FAXLOG_PATH} | sed -n "/${JOUR}\/${MOIS}/p" > ${ERROR_FILE_PATH}  
+awk '/LINDRP/{if($5 > 4){print $0}}' ${FAXLOG_PATH} | sed -n "/${JOUR}\/${MOIS}/p" >> ${ERROR_FILE_PATH}  
 
 lindrp=$((lindrp - lindrp_fail))
 
@@ -122,7 +125,7 @@ echo "NOANSWER FAX for ${JOUR}/${MOIS} : ${noansw}"  >> ${STAT_FILE_PATH}
 noansw_fail=$(awk '/NOANSW/{if($5 > 4){print $2" -- "$5" -- "$6}}' ${FAXLOG_PATH} | sed -n "/${JOUR}\/${MOIS}/p"  |  wc -l)
 echo "NOANSWERFAIL FAX for ${JOUR}/${MOIS} : ${noansw_fail}"
 echo "NOANSWERFAIL FAX for ${JOUR}/${MOIS} : ${noansw_fail}"  >> ${STAT_FILE_PATH}
-awk '/NOANSW/{if($5 > 4){print $0}}' ${FAXLOG_PATH} | sed -n "/${JOUR}\/${MOIS}/p" > ${ERROR_FILE_PATH}  
+awk '/NOANSW/{if($5 > 4){print $0}}' ${FAXLOG_PATH} | sed -n "/${JOUR}\/${MOIS}/p" >> ${ERROR_FILE_PATH}  
 
 noansw=$((noansw - noansw_fail))
 
@@ -137,7 +140,7 @@ echo "NOTFAX FAX for ${JOUR}/${MOIS} : ${notfax}" >> ${STAT_FILE_PATH}
 notfax_fail=$(awk '/NOTFAX/{if($5 > 4){print $2" -- "$5" -- "$6}}' ${FAXLOG_PATH} | sed -n "/${JOUR}\/${MOIS}/p"  |  wc -l)
 echo "NOTFAXFAIL FAX for ${JOUR}/${MOIS} : ${notfax_fail}"
 echo "NOTFAXFAIL FAX for ${JOUR}/${MOIS} : ${notfax_fail}"  >> ${STAT_FILE_PATH}
-awk '/NOTFAX/{if($5 > 4){print $0}}' ${FAXLOG_PATH} | sed -n "/${JOUR}\/${MOIS}/p" > ${ERROR_FILE_PATH}  
+awk '/NOTFAX/{if($5 > 4){print $0}}' ${FAXLOG_PATH} | sed -n "/${JOUR}\/${MOIS}/p" >> ${ERROR_FILE_PATH}  
 
 
 notfax=$((notfax - notfax_fail))
@@ -149,7 +152,7 @@ echo "SCHERR FAX for ${JOUR}/${MOIS} : ${scherr}" >> ${STAT_FILE_PATH}
 scherr_fail=$(awk '/SCHERR/{if($5 > 4){print $2" -- "$5" -- "$6}}'  ${FAXLOG_PATH} | sed -n "/${JOUR}\/${MOIS}/p"  |  wc -l)
 echo "SCHERRFAIL FAX for ${JOUR}/${MOIS} : ${scherr_fail}"
 echo "SCHERRFAIL FAX for ${JOUR}/${MOIS} : ${scherr_fail}" >> ${STAT_FILE_PATH}
-awk '/SCHERR/{if($5 > 4){print $0}}' ${FAXLOG_PATH} | sed -n "/${JOUR}\/${MOIS}/p" > ${ERROR_FILE_PATH}  
+awk '/SCHERR/{if($5 > 4){print $0}}' ${FAXLOG_PATH} | sed -n "/${JOUR}\/${MOIS}/p" >> ${ERROR_FILE_PATH}  
 
 scherr=$((scherr - scherr_fail))
 
