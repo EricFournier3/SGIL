@@ -1,6 +1,8 @@
 #!/bin/bash
 
 #TODO AJOUTER MOUNT
+# AJOUTER JOUR ET MOIS
+# il faut executer aussi le matin pour la veille
 
 
 #BASEDIR="/mnt/Partage/LSPQ_Partage/temp_eric/FAX_SGIL/"
@@ -10,6 +12,7 @@ BASEDIR_OUT=${BASEDIR}"OUT/"
 FAXLOG_FILE=$1
 JOUR="$2"
 MOIS="$3"
+
 
 CURRENT_PATH=${PWD}/
 CURRENT_YEAR=$(date +"%Y")
@@ -26,25 +29,26 @@ FAXLOG_PATH=${BASEDIR_IN}${FAXLOG_FILE}
 
 FAXSTATUS_PATH_CURRENT=${CURRENT_PATH}"FAX_STATUS_${CURRENT_YEAR}${MOIS}${JOUR}_${CURRENT_HOUR}.txt"
 
+#echo "FAXLOG ${FAXLOG_FILE}"
+#echo "MOIS ${MOIS}"
+#echo "JOUR ${JOUR}"
+
+
 if [ ! -f ${FAXLOG_PATH} ]
   then
-  echo "Entrer un nom de fichier"
-  exit 1
+  FAXLOG_FILE="faxlog.txt"
 fi
 
 if [ ${#JOUR} -eq 0 ]
   then 
-  echo "entrer un jour"
-  echo "./FaxStat.sh <NomFichier> <DD> <MM>"
-  exit 1
+  JOUR=$(date +"%d")
 fi
 
 if [ ${#MOIS} -eq 0 ]
   then 
-  echo "entrer un mois"
-  echo "./FaxStat.sh <NomFichier> <DD> <MM>"
-  exit 1
+  MOIS=$(date +"%m")
 fi
+
 
 sed -n "/${JOUR}\/${MOIS}/p"  ${FAXLOG_PATH} >  $FAXSTATUS_PATH_CURRENT
 
