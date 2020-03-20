@@ -177,8 +177,8 @@ echo "SENDING FAX for ${JOUR}/${MOIS} : ${snding}"  >> ${STAT_FILE_PATH}
 echo "------------------------------ SOMMAIRE ${JOUR}/${MOIS} pour ${FAXLOG_FILE} ---------------------------------------"
 echo "------------------------------ SOMMAIRE ${JOUR}/${MOIS} pour ${FAXLOG_FILE} ---------------------------------------"  >> ${STAT_FILE_PATH}
 
-TOTAL_ERROR=$((busy_fail + fimerr_fail + timeout_fail + lindrp_fail + noansw_fail + notfax + scherr_fail))
-TOTAL_PENDING=$((busy + fimerr + timeout + queued + cancel + lindrp + noansw + nofile + notfax + scherr + snding))
+TOTAL_ERROR=$((busy_fail + fimerr_fail + timeout_fail + lindrp_fail + noansw_fail + notfax_fail + nofile +  cancel + scherr_fail))
+TOTAL_PENDING=$((busy + fimerr + timeout + queued  + lindrp + noansw  + notfax + scherr + snding))
 
 echo "TOTAL SEND : ${normal}"
 echo "TOTAL PENDING : ${TOTAL_PENDING}"
